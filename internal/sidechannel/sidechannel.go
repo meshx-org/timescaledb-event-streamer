@@ -280,6 +280,20 @@ func (sc *sideChannel) ReadChunks(
 ) error {
 
 	return sc.newSession(time.Second*20, func(session *session) error {
+		// TimescaleDB 2.26.0 removed the `dropped` column from
+		// _timescaledb_catalog.chunk. Select it only when present so we stay
+		// compatible across all TimescaleDB versions.
+		var hasDroppedColumn bool
+		if err := session.queryRow(queryCheckChunkDroppedColumnExists).Scan(&hasDroppedColumn); err != nil {
+			return errors.Wrap(err, 0)
+		}
+
+		droppedExpression := "false"
+		if hasDroppedColumn {
+			droppedExpression = "c1.dropped"
+		}
+		query := fmt.Sprintf(queryTemplateReadChunks, droppedExpression)
+
 		return session.queryFunc(func(row pgx.Row) error {
 			var id, hypertableId int32
 			var schemaName, tableName string
@@ -295,7 +309,7 @@ func (sc *sideChannel) ReadChunks(
 			return cb(
 				systemcatalog.NewChunk(id, hypertableId, schemaName, tableName, dropped, status, compressedChunkId),
 			)
-		}, queryReadChunks)
+		}, query)
 	})
 }
 

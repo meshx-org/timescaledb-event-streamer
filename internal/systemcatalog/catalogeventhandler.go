@@ -268,7 +268,10 @@ func (s *systemCatalogReplicationEventHandler) decomposeChunk(
 	hypertableId := values["hypertable_id"].(int32)
 	schemaName := values["schema_name"].(string)
 	tableName := values["table_name"].(string)
-	dropped := values["dropped"].(bool)
+	// TimescaleDB 2.26.0 removed the `dropped` column from
+	// _timescaledb_catalog.chunk, so it is no longer part of the replicated
+	// tuple. Default to false (a replicated chunk row is always a live chunk).
+	dropped, _ := values["dropped"].(bool)
 	status := values["status"].(int32)
 
 	var compressedChunkId *int32

@@ -32,9 +32,11 @@ var (
 const (
 	TSDB_MIN_VERSION TimescaleVersion = 21000
 	TSDB_212_VERSION TimescaleVersion = 21200
-	PG_MIN_VERSION   PostgresVersion  = 130000
+	PG_MIN_VERSION   PostgresVersion  = 140000
 	PG_14_VERSION    PostgresVersion  = 140000
 	PG_15_VERSION    PostgresVersion  = 150000
+	PG_17_VERSION    PostgresVersion  = 170000
+	PG_18_VERSION    PostgresVersion  = 180000
 )
 
 var (

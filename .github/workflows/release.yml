@@ -5,8 +5,8 @@ on:
     types: [created]
 
 env:
-  golang-version: 1.21.4
-  golangci-lint-version: v1.55.2
+  golang-version: 1.26.4
+  golangci-lint-version: v2.12.2
   docker-registry: ghcr.io
   docker-image-name: ${{ github.repository }}
 

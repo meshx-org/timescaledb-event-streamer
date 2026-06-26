@@ -357,6 +357,25 @@ func WithTimescaleVersionCheck(
 	}
 }
 
+func WithMaxTimescaleVersionCheck(
+	version version.TimescaleVersion,
+) testConfigurator {
+
+	return func(ctx *testContext) {
+		ctx.setupFunctions = append(ctx.setupFunctions, func(setupContext SetupContext) error {
+			tsdbVersion := ctx.TimescaleVersion()
+			if tsdbVersion >= version {
+				return &skipTestError{
+					msg: fmt.Sprintf(
+						"Skipped test, because of TimescaleDB version >=%s (%s)\n", version, tsdbVersion,
+					),
+				}
+			}
+			return nil
+		})
+	}
+}
+
 func WithSetup(
 	fn func(ctx SetupContext) error,
 ) testConfigurator {

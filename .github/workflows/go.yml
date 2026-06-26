@@ -7,8 +7,8 @@ on:
     branches: [ "**" ]
 
 env:
-  golang-version: 1.24.2
-  golangci-lint-version: v2.1.1
+  golang-version: 1.26.4
+  golangci-lint-version: v2.12.2
   docker-registry: ghcr.io
   docker-image-name: ${{ github.repository }}
 
@@ -71,8 +71,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pg_version: [ 13, 14, 15 ]
+        pg_version: [ 14, 15, 17, 18 ]
         tsdb_version: [ "2.11", "latest" ]
+        # TimescaleDB 2.11 only ships images up to PG15; newer PG majors only
+        # exist on the "latest" TimescaleDB release line.
+        exclude:
+          - pg_version: 17
+            tsdb_version: "2.11"
+          - pg_version: 18
+            tsdb_version: "2.11"
 
     name: Tests (PG) - PG ${{ matrix.pg_version }} / TSDB ${{ matrix.tsdb_version }}
     runs-on: ubuntu-latest
