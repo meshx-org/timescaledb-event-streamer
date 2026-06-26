@@ -20,6 +20,7 @@
 package stats
 
 import (
+	"context"
 	"fmt"
 	"github.com/go-errors/errors"
 	"github.com/noctarius/timescaledb-event-streamer/spi/config"
@@ -27,7 +28,6 @@ import (
 	"github.com/segmentio/stats/v4"
 	"github.com/segmentio/stats/v4/procstats"
 	"github.com/segmentio/stats/v4/prometheus"
-	"golang.org/x/net/context"
 	"io"
 	"net/http"
 )

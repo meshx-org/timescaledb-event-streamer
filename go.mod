@@ -1,15 +1,15 @@
 module github.com/noctarius/timescaledb-event-streamer
 
-go 1.24
+go 1.25.0
 
-toolchain go1.24.2
+toolchain go1.26.4
 
 require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/IBM/sarama v1.45.1
 	github.com/aws/aws-sdk-go v1.55.7
 	github.com/cenkalti/backoff/v4 v4.3.0
-	github.com/expr-lang/expr v1.17.2
+	github.com/expr-lang/expr v1.17.7
 	github.com/go-errors/errors v1.5.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/goccy/go-json v0.10.5
@@ -21,20 +21,20 @@ require (
 	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438
 	github.com/jackc/pgio v1.0.0
 	github.com/jackc/pglogrepl v0.0.0-20250331215543-51ad596ee12f
-	github.com/jackc/pgx/v5 v5.7.4
+	github.com/jackc/pgx/v5 v5.9.2
 	github.com/moby/sys/atomicwriter v0.1.0
 	github.com/nats-io/nats.go v1.42.0
 	github.com/samber/do v1.6.0
 	github.com/samber/lo v1.50.0
 	github.com/segmentio/stats/v4 v4.8.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/localstack v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/redis v0.37.0
 	github.com/twpayne/go-geom v1.6.1
 	github.com/urfave/cli v1.22.16
 	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0
-	golang.org/x/net v0.39.0
+	golang.org/x/net v0.54.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -120,12 +120,12 @@ require (
 	go.opentelemetry.io/otel v1.35.0 // indirect
 	go.opentelemetry.io/otel/metric v1.35.0 // indirect
 	go.opentelemetry.io/otel/trace v1.35.0 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
-	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/term v0.31.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
+	golang.org/x/mod v0.35.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/term v0.43.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 )
 
 replace github.com/segmentio/stats/v4 v4.1.0 => github.com/noctarius/segmentio_stats/v4 v4.1.5

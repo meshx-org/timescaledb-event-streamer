@@ -322,7 +322,7 @@ func (r *Replicator) containerInitializer(
 	// Check version information
 	if !replicationContext.IsMinimumPostgresVersion() {
 		return cli.NewExitError(
-			"timescaledb-event-streamer requires PostgreSQL 13 or later", 11,
+			"timescaledb-event-streamer requires PostgreSQL 14 or later", 11,
 		)
 	}
 	if !replicationContext.IsMinimumTimescaleVersion() {

@@ -119,8 +119,23 @@ LEFT JOIN pg_catalog.pg_class c
    AND c.relnamespace = n.oid;
 `
 
-const queryReadChunks = `
-SELECT c1.id, c1.hypertable_id, c1.schema_name, c1.table_name, c1.compressed_chunk_id, c1.dropped, c1.status
+// queryCheckChunkDroppedColumnExists detects whether the _timescaledb_catalog.chunk
+// catalog table still provides the `dropped` column. TimescaleDB 2.26.0 removed it,
+// so the column has to be selected conditionally to stay compatible with all versions.
+const queryCheckChunkDroppedColumnExists = `
+SELECT EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = '_timescaledb_catalog'
+      AND table_name = 'chunk'
+      AND column_name = 'dropped'
+)`
+
+// queryTemplateReadChunks reads the chunk catalog. The `%s` placeholder is replaced
+// with either `c1.dropped` (TimescaleDB < 2.26) or the literal `false` (>= 2.26, where
+// the column was removed and tombstone rows for dropped chunks no longer exist).
+const queryTemplateReadChunks = `
+SELECT c1.id, c1.hypertable_id, c1.schema_name, c1.table_name, c1.compressed_chunk_id, %s, c1.status
 FROM _timescaledb_catalog.chunk c1
 LEFT JOIN timescaledb_information.chunks c2
        ON c2.chunk_schema = c1.schema_name

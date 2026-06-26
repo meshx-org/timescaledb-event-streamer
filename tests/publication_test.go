@@ -574,6 +574,11 @@ func (pts *PublicationTestSuite) Test_Dropped_Chunks_Should_Be_Ignored() {
 			return nil
 		},
 
+		// TimescaleDB 2.26.0 removed the `dropped` column (and the dropped-chunk
+		// tombstone rows) from _timescaledb_catalog.chunk, so this scenario no
+		// longer exists and the manual catalog INSERT below is invalid there.
+		testrunner.WithMaxTimescaleVersionCheck(22600),
+
 		testrunner.WithSetup(func(ctx testrunner.SetupContext) error {
 			_, tn, err := ctx.CreateHypertable("ts", time.Hour,
 				testsupport.NewColumn("ts", "timestamptz", false, true, nil),

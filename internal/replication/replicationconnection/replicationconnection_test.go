@@ -18,6 +18,7 @@
 package replicationconnection
 
 import (
+	"context"
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
@@ -26,7 +27,6 @@ import (
 	"github.com/noctarius/timescaledb-event-streamer/spi/statestorage"
 	"github.com/noctarius/timescaledb-event-streamer/spi/version"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/net/context"
 	"testing"
 	"time"
 )
