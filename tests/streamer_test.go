@@ -1182,16 +1182,28 @@ func (its *IntegrationTestSuite) Test_ContinuousAggregate_Create_Events() {
 				return err
 			}
 
+			// The continuous-aggregate refresh materializes rows via a GROUP BY with
+			// no ORDER BY, so their order is unspecified. PostgreSQL 15+ plans that
+			// aggregation differently than PG 14 (hash/parallel aggregation), so the
+			// CREATE events no longer arrive in bucket order. Assert on the set of
+			// values instead of their arrival position.
+			events := testSink.Events()
+			if len(events) < 20 {
+				its.T().Errorf("expected at least 20 events but got %d", len(events))
+				return nil
+			}
+			seenValues := make(map[int]bool)
 			for i := 0; i < 20; i++ {
-				expected := i + 1
-				event := testSink.Events()[i]
-				val := int(event.Envelope.Payload.After["val"].(float64))
-				if expected != val {
-					its.T().Errorf("event order inconsistent %d != %d", expected, val)
-					return nil
-				}
+				event := events[i]
 				if event.Envelope.Payload.Op != schema.OP_CREATE {
 					its.T().Errorf("event should be of type 'c' but was %s", event.Envelope.Payload.Op)
+					return nil
+				}
+				seenValues[int(event.Envelope.Payload.After["val"].(float64))] = true
+			}
+			for expected := 1; expected <= 20; expected++ {
+				if !seenValues[expected] {
+					its.T().Errorf("missing continuous aggregate event for val %d", expected)
 					return nil
 				}
 			}
@@ -1283,16 +1295,28 @@ func (its *IntegrationTestSuite) Test_ContinuousAggregate_Scheduled_Refresh_Crea
 				return err
 			}
 
+			// The continuous-aggregate refresh materializes rows via a GROUP BY with
+			// no ORDER BY, so their order is unspecified. PostgreSQL 15+ plans that
+			// aggregation differently than PG 14 (hash/parallel aggregation), so the
+			// CREATE events no longer arrive in bucket order. Assert on the set of
+			// values instead of their arrival position.
+			events := testSink.Events()
+			if len(events) < 20 {
+				its.T().Errorf("expected at least 20 events but got %d", len(events))
+				return nil
+			}
+			seenValues := make(map[int]bool)
 			for i := 0; i < 20; i++ {
-				expected := i + 1
-				event := testSink.Events()[i]
-				val := int(event.Envelope.Payload.After["val"].(float64))
-				if expected != val {
-					its.T().Errorf("event order inconsistent %d != %d", expected, val)
-					return nil
-				}
+				event := events[i]
 				if event.Envelope.Payload.Op != schema.OP_CREATE {
 					its.T().Errorf("event should be of type 'c' but was %s", event.Envelope.Payload.Op)
+					return nil
+				}
+				seenValues[int(event.Envelope.Payload.After["val"].(float64))] = true
+			}
+			for expected := 1; expected <= 20; expected++ {
+				if !seenValues[expected] {
+					its.T().Errorf("missing continuous aggregate event for val %d", expected)
 					return nil
 				}
 			}
