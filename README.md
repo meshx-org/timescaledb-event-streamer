@@ -41,6 +41,18 @@ anything to the target application._
 
 # Getting Started
 
+## Supported Versions
+
+`timescaledb-event-streamer` supports the following versions:
+
+| Component         | Supported versions                                          |
+|-------------------|-------------------------------------------------------------|
+| PostgreSQL        | 14 or newer (continuously tested against 14, 15, 17, and 18) |
+| TimescaleDB       | 2.10 or newer (continuously tested against 2.11 and latest)  |
+| Go (from source)  | 1.25 or newer (only required when building from source)      |
+
+PostgreSQL 13 and earlier are no longer supported.
+
 ## Installing prebuilt Packages
 
 To automatically download the latest version into the current directory, the repository
