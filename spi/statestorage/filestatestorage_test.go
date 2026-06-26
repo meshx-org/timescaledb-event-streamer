@@ -18,7 +18,7 @@
 package statestorage
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"os"

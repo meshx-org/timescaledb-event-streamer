@@ -20,9 +20,9 @@ package watermark
 import (
 	"bytes"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/internal/typemanager"
-	"github.com/noctarius/timescaledb-event-streamer/spi/encoding"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/typemanager"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/encoding"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 )
 
 type SnapshotContext struct {

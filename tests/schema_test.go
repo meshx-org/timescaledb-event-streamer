@@ -18,9 +18,9 @@
 package tests
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/testsupport/testrunner"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/testsupport/testrunner"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )

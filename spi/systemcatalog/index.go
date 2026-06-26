@@ -20,7 +20,7 @@ package systemcatalog
 import (
 	"fmt"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 	"github.com/samber/lo"
 	"reflect"
 	"strings"

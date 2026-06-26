@@ -18,7 +18,7 @@
 package sink
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 	"time"
 )
 

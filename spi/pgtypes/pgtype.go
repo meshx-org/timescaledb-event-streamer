@@ -17,7 +17,7 @@
 
 package pgtypes
 
-import "github.com/noctarius/timescaledb-event-streamer/spi/schema"
+import "github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 
 // TypeConverter represents a conversion function to convert from
 // a PostgreSQL internal OID number and value to a value according

@@ -18,9 +18,9 @@
 package eventhandlers
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 )
 
 type BaseReplicationEventHandler interface {

@@ -20,10 +20,10 @@ package replicationcontext
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgconn"
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/statestorage"
-	"github.com/noctarius/timescaledb-event-streamer/spi/version"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/statestorage"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/version"
 )
 
 type ReplicationContext interface {

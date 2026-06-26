@@ -18,12 +18,12 @@
 package logicalreplicationresolver
 
 import (
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/eventhandlers"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/replicationcontext"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
-	"github.com/noctarius/timescaledb-event-streamer/spi/task"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/replicationcontext"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/task"
 	"time"
 )
 

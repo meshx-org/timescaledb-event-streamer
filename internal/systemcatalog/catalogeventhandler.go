@@ -20,8 +20,8 @@ package systemcatalog
 import (
 	"fmt"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 )
 
 type hypertableDecomposerCallback = func(

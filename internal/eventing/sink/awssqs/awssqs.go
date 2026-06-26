@@ -25,11 +25,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/go-errors/errors"
-	sinkimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink"
-	config "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/encoding"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sink"
+	sinkimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink"
+	config "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/encoding"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sink"
 	"time"
 )
 

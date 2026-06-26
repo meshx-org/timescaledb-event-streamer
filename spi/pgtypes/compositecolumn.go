@@ -17,7 +17,7 @@
 
 package pgtypes
 
-import "github.com/noctarius/timescaledb-event-streamer/spi/schema"
+import "github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 
 type CompositeColumnFactory func(
 	name string, oid uint32, modifiers int, nullable bool,

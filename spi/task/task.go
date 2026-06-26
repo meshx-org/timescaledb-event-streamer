@@ -17,7 +17,7 @@
 
 package task
 
-import "github.com/noctarius/timescaledb-event-streamer/spi/eventhandlers"
+import "github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
 
 type Task = func(notificator Notificator)
 

@@ -21,7 +21,7 @@ import (
 	"encoding/json"
 	"github.com/go-errors/errors"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/noctarius/timescaledb-event-streamer/spi/encoding"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/encoding"
 	"time"
 )
 

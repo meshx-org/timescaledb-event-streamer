@@ -18,8 +18,8 @@
 package schema
 
 import (
-	namingstrategyimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/namingstrategy"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
+	namingstrategyimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/namingstrategy"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

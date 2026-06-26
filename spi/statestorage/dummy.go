@@ -20,7 +20,7 @@ package statestorage
 import (
 	"encoding"
 	"github.com/go-errors/errors"
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
 	"sync"
 )
 

@@ -6,7 +6,7 @@ export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-BASE_URL="https://github.com/noctarius/timescaledb-event-streamer/releases"
+BASE_URL="https://github.com/meshx-org/timescaledb-event-streamer/releases"
 
 function available() {
   local ret

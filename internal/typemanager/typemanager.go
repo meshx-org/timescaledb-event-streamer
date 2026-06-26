@@ -23,11 +23,11 @@ import (
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/noctarius/timescaledb-event-streamer/internal/containers"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sidechannel"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/containers"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sidechannel"
 	"reflect"
 )
 

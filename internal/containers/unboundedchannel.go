@@ -18,7 +18,7 @@
 package containers
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/internal/functional"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/functional"
 	"sync/atomic"
 )
 

@@ -19,7 +19,7 @@ package encoding
 
 import (
 	"github.com/goccy/go-json"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
 )
 
 type JsonEncoder struct {

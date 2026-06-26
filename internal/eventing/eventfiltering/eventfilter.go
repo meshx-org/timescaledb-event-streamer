@@ -21,10 +21,10 @@ import (
 	"github.com/expr-lang/expr"
 	"github.com/expr-lang/expr/vm"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/internal/systemcatalog/tablefiltering"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/systemcatalog/tablefiltering"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 )
 
 type EventFilter interface {

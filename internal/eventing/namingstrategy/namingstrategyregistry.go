@@ -19,8 +19,8 @@ package namingstrategy
 
 import (
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/namingstrategy"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/namingstrategy"
 	"sync"
 )
 

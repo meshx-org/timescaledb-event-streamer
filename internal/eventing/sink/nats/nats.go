@@ -20,12 +20,12 @@ package nats
 import (
 	"context"
 	"fmt"
+	sinkimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink"
+	config "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/encoding"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sink"
 	"github.com/nats-io/nats.go"
-	sinkimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink"
-	config "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/encoding"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sink"
 	"time"
 )
 

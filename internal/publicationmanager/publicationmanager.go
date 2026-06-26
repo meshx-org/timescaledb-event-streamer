@@ -18,10 +18,10 @@
 package publicationmanager
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/publication"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sidechannel"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/publication"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sidechannel"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 )
 
 type publicationManager struct {

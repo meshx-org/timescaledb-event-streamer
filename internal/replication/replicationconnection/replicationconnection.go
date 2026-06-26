@@ -26,10 +26,10 @@ import (
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgproto3"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/replicationcontext"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sidechannel"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/replicationcontext"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sidechannel"
 	"time"
 )
 

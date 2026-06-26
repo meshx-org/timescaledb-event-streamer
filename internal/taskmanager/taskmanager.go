@@ -21,12 +21,12 @@ import (
 	stderrors "errors"
 	"fmt"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/internal/containers"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/internal/waiting"
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/eventhandlers"
-	"github.com/noctarius/timescaledb-event-streamer/spi/task"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/containers"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/waiting"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/task"
 	"sync/atomic"
 )
 

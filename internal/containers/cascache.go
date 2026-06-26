@@ -20,7 +20,7 @@ package containers
 import (
 	"github.com/go-errors/errors"
 	"github.com/gookit/goutil/reflects"
-	"github.com/noctarius/timescaledb-event-streamer/internal/functional"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/functional"
 	"reflect"
 	"sync/atomic"
 )
