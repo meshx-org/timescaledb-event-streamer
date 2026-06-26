@@ -14,6 +14,17 @@ linters:
       - legacy
       - std-error-handling
     rules:
+      # govet's `inline` analyzer (enabled with the go1.26 toolchain) only emits
+      # modernization hints, some of which are not actionable (e.g. "cannot inline:
+      # type parameter inference is not yet supported"). Keep it from failing lint.
+      - linters:
+          - govet
+        text: "(should be inlined|cannot inline)"
+      # QF1012 is a stylistic quickfix (WriteString(fmt.Sprintf(...)) -> Fprintf)
+      # with 80+ pre-existing call sites; out of scope to churn here.
+      - linters:
+          - staticcheck
+        text: "QF1012"
       - linters:
           - dupl
           - errcheck
