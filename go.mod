@@ -127,5 +127,3 @@ require (
 	golang.org/x/term v0.43.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 )
-
-replace github.com/segmentio/stats/v4 v4.1.0 => github.com/noctarius/segmentio_stats/v4 v4.1.5
