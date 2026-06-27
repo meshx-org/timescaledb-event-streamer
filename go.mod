@@ -13,9 +13,9 @@ require (
 	github.com/go-errors/errors v1.5.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/goccy/go-json v0.10.5
-	github.com/gookit/color v1.5.4
-	github.com/gookit/goutil v0.6.18
-	github.com/gookit/slog v0.5.8
+	github.com/gookit/color v1.6.1
+	github.com/gookit/goutil v0.7.6
+	github.com/gookit/slog v0.7.1
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/inhies/go-bytesize v0.0.0-20220417184213-4913239db9cf
 	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438
@@ -67,7 +67,8 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/gookit/gsr v0.1.0 // indirect
+	github.com/gookit/gsr v0.1.1 // indirect
+	github.com/gookit/rotatefile v0.3.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
