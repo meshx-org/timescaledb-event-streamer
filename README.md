@@ -543,6 +543,27 @@ as well.
 | `stats.port`            |                                                                                               Configure the port on which it is available. |       int |          8081 |
 | `stats.runtime.enabled` | Enables metrics about this runtime, see [segmentio/procstats](https://github.com/segmentio/stats?tab=readme-ov-file#processes) for details |   boolean |          true |
 
+### Tracing Configuration
+
+`timescaledb-event-streamer` can emit [OpenTelemetry](https://opentelemetry.io/)
+traces. Tracing is disabled by default; when disabled a no-op tracer is installed
+with effectively no runtime overhead. When enabled, a span is created per
+replication transaction with a child span per emitted event, exported via OTLP.
+
+W3C trace-context propagators are always installed, so the tool can continue an
+inbound trace and forward context downstream. If the exporter endpoint is left
+empty, the standard `OTEL_EXPORTER_OTLP_*` / `OTEL_EXPORTER_OTLP_TRACES_*`
+environment variables are honored.
+
+| Property                                | Description                                                                                              | Data Type |                      Default Value |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------|----------:|-----------------------------------:|
+| `telemetry.tracing.enabled`             | Enables OpenTelemetry tracing.                                                                            |   boolean |                              false |
+| `telemetry.tracing.servicename`         | The `service.name` reported on exported spans.                                                            |    string |       `timescaledb-event-streamer` |
+| `telemetry.tracing.exporter.protocol`   | The OTLP transport to use. Valid values are `grpc` and `http`.                                            |    string |                             `grpc` |
+| `telemetry.tracing.exporter.endpoint`   | The OTLP collector endpoint. If empty, the `OTEL_EXPORTER_OTLP_*` environment variables are used instead. |    string |                       empty string |
+| `telemetry.tracing.exporter.insecure`   | Disables transport security (TLS) for the OTLP exporter.                                                  |   boolean |                              false |
+| `telemetry.tracing.exporter.headers`    | Additional headers (e.g. for authentication) sent to the OTLP collector.                                  |       map |                        empty struct |
+
 
 # Includes and Excludes Patterns
 

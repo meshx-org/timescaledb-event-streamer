@@ -175,3 +175,15 @@ logging:
 #  port: 8081
 #  runtime:
 #    enabled: true
+
+# OpenTelemetry tracing (disabled by default). When enabled, spans are exported
+# via OTLP. If the endpoint is omitted, the standard OTEL_EXPORTER_OTLP_* /
+# OTEL_EXPORTER_OTLP_TRACES_* environment variables are honored.
+#telemetry:
+#  tracing:
+#    enabled: true
+#    serviceName: 'timescaledb-event-streamer'
+#    exporter:
+#      protocol: 'grpc' # grpc | http
+#      endpoint: 'localhost:4317'
+#      insecure: true

@@ -18,6 +18,7 @@
 package eventemitting
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"github.com/cenkalti/backoff/v4"
@@ -26,6 +27,7 @@ import (
 	"github.com/meshx-org/timescaledb-event-streamer/internal/eventing/eventfiltering"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/stats"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/telemetry"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
@@ -35,6 +37,9 @@ import (
 	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/task"
 	"github.com/samber/lo"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 	"time"
 )
 
@@ -66,6 +71,7 @@ type EventEmitter struct {
 	streamManager      stream.Manager
 	statsReporter      *stats.Reporter
 	backOff            backoff.BackOff
+	tracer             trace.Tracer
 	logger             *logging.Logger
 
 	stats *eventEmitterStats
@@ -105,6 +111,7 @@ func NewEventEmitter(
 		logger:             logger,
 		statsReporter:      statsService.NewReporter("streamer_eventemitter"),
 		backOff:            backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 8),
+		tracer:             telemetry.Tracer(),
 		stats:              &eventEmitterStats{},
 	}, nil
 }
@@ -166,6 +173,20 @@ func (ee *EventEmitter) emit(
 type eventEmitterEventHandler struct {
 	eventEmitter *EventEmitter
 	typeManager  pgtypes.TypeManager
+
+	// Current replication transaction span. The replication stream is processed
+	// sequentially, so a single in-flight transaction is tracked at a time.
+	txContext context.Context
+	txSpan    trace.Span
+}
+
+// eventContext returns the context carrying the active transaction span, or a
+// background context when no transaction is open (e.g. during snapshotting).
+func (e *eventEmitterEventHandler) eventContext() context.Context {
+	if e.txContext != nil {
+		return e.txContext
+	}
+	return context.Background()
 }
 
 func (e *eventEmitterEventHandler) OnReadEvent(
@@ -322,14 +343,28 @@ func (e *eventEmitterEventHandler) OnRelationEvent(
 }
 
 func (e *eventEmitterEventHandler) OnBeginEvent(
-	_ pgtypes.XLogData, _ *pgtypes.BeginMessage,
+	xld pgtypes.XLogData, _ *pgtypes.BeginMessage,
 ) error {
+
+	ctx, span := e.eventEmitter.tracer.Start(
+		context.Background(), "postgresql.transaction",
+		trace.WithSpanKind(trace.SpanKindConsumer),
+		trace.WithAttributes(attribute.Int64("db.postgresql.xid", int64(xld.Xid))),
+	)
+	e.txContext = ctx
+	e.txSpan = span
 	return nil
 }
 
 func (e *eventEmitterEventHandler) OnCommitEvent(
 	_ pgtypes.XLogData, _ *pgtypes.CommitMessage,
 ) error {
+
+	if e.txSpan != nil {
+		e.txSpan.End()
+		e.txSpan = nil
+		e.txContext = nil
+	}
 	return nil
 }
 
@@ -367,7 +402,23 @@ func (e *eventEmitterEventHandler) emit(
 func (e *eventEmitterEventHandler) emit0(
 	xld pgtypes.XLogData, snapshot bool, hypertable schema.TableAlike,
 	keyFactory keyFactoryFn, payloadFactory payloadFactoryFn,
-) error {
+) (err error) {
+
+	_, span := e.eventEmitter.tracer.Start(
+		e.eventContext(), "timescaledb.event",
+		trace.WithSpanKind(trace.SpanKindProducer),
+		trace.WithAttributes(
+			attribute.String("db.collection.name", hypertable.CanonicalName()),
+			attribute.Bool("messaging.snapshot", snapshot),
+		),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		span.End()
+	}()
 
 	selectedStream := e.eventEmitter.streamManager.GetOrCreateStream(hypertable)
 	if selectedStream == nil {
@@ -407,7 +458,20 @@ func (e *eventEmitterEventHandler) emit0(
 
 func (e *eventEmitterEventHandler) emitMessageEvent(
 	xld pgtypes.XLogData, msg *pgtypes.LogicalReplicationMessage, payloadFactory payloadFactoryFn,
-) error {
+) (err error) {
+
+	_, span := e.eventEmitter.tracer.Start(
+		e.eventContext(), "timescaledb.message",
+		trace.WithSpanKind(trace.SpanKindProducer),
+		trace.WithAttributes(attribute.String("messaging.message.prefix", msg.Prefix)),
+	)
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+		}
+		span.End()
+	}()
 
 	timestamp := time.Now()
 	if msg.IsTransactional() {

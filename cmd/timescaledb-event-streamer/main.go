@@ -18,11 +18,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/meshx-org/timescaledb-event-streamer/internal"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/erroring"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/sysconfig"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/telemetry"
 	"github.com/meshx-org/timescaledb-event-streamer/internal/waiting"
 	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/version"
@@ -36,6 +38,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	"time"
 )
 
 var (
@@ -151,6 +154,18 @@ func start(
 	if err := logging.InitializeLogging(config, logToStdErr); err != nil {
 		return err
 	}
+
+	telemetryShutdown, err := telemetry.Initialize(config)
+	if err != nil {
+		return cli.NewExitError(fmt.Sprintf("Telemetry initialization failed: %v\n", err), 7)
+	}
+	defer func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := telemetryShutdown(shutdownCtx); err != nil {
+			fmt.Fprintf(log, "Error during telemetry shutdown: %v\n", err)
+		}
+	}()
 
 	if spiconfig.GetOrDefault(config, spiconfig.PropertyPostgresqlConnection, "") == "" {
 		return cli.NewExitError("PostgreSQL connection string required", 6)

@@ -121,3 +121,12 @@ logging.loggers.LogicalReplicationResolver.outputs.console.enabled = false
 #stats.enabled = true
 #stats.port = 8081
 #stats.runtime.enabled = true
+
+# OpenTelemetry tracing (disabled by default). When enabled, spans are exported
+# via OTLP. If the endpoint is omitted, the standard OTEL_EXPORTER_OTLP_* /
+# OTEL_EXPORTER_OTLP_TRACES_* environment variables are honored.
+#telemetry.tracing.enabled = true
+#telemetry.tracing.servicename = 'timescaledb-event-streamer'
+#telemetry.tracing.exporter.protocol = 'grpc' # grpc | http
+#telemetry.tracing.exporter.endpoint = 'localhost:4317'
+#telemetry.tracing.exporter.insecure = true
