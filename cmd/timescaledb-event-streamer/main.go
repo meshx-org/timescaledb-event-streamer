@@ -172,9 +172,12 @@ func start(
 	}
 
 	systemConfig := sysconfig.NewSystemConfig(config)
-	streamer, err := internal.NewStreamer(systemConfig)
-	if err != nil {
-		return err
+	// NewStreamer returns a concrete *cli.ExitError; keep it in its own variable
+	// so the nil check is on the pointer and not on the error interface (which
+	// would always be non-nil for a typed-nil value).
+	streamer, exitErr := internal.NewStreamer(systemConfig)
+	if exitErr != nil {
+		return exitErr
 	}
 
 	signals := make(chan os.Signal, 1)
