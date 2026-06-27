@@ -18,6 +18,7 @@
 package sink
 
 import (
+	"context"
 	"github.com/go-errors/errors"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/sink"
@@ -63,8 +64,9 @@ func (sm *sinkManager) Stop() error {
 }
 
 func (sm *sinkManager) Emit(
-	timestamp time.Time, topicName string, key, envelope schema.Struct,
+	ctx context.Context, timestamp time.Time, topicName string, key, envelope schema.Struct,
 ) error {
 
+	sink.InjectTraceContext(sm.sinkContext, ctx)
 	return sm.sink.Emit(sm.sinkContext, timestamp, topicName, key, envelope)
 }

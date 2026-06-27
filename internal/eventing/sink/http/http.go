@@ -116,7 +116,7 @@ func (h *httpSink) Stop() error {
 }
 
 func (h *httpSink) Emit(
-	_ sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
+	sinkContext sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
 ) error {
 	payload, err := h.encoder.Marshal(envelope)
 	if err != nil {
@@ -127,7 +127,15 @@ func (h *httpSink) Emit(
 		return err
 	}
 
-	req.Header = *h.headers
+	// Clone the shared header set so per-request trace headers don't leak across
+	// requests.
+	req.Header = h.headers.Clone()
+	if req.Header == nil {
+		req.Header = make(http.Header)
+	}
+	for name, value := range sink.TraceHeaders(sinkContext) {
+		req.Header.Set(name, value)
+	}
 	resp, err := h.client.Do(req)
 	if err != nil {
 		return err

@@ -37,8 +37,10 @@ import (
 	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/task"
 	"github.com/samber/lo"
+	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 	"time"
 )
@@ -74,6 +76,11 @@ type EventEmitter struct {
 	tracer             trace.Tracer
 	logger             *logging.Logger
 
+	// tracePropagationPrefix, when non-empty, is the logical-replication message
+	// prefix carrying an inbound W3C traceparent. Such messages are consumed as
+	// the parent trace context of their transaction instead of being emitted.
+	tracePropagationPrefix string
+
 	stats *eventEmitterStats
 }
 
@@ -88,7 +95,21 @@ func NewEventEmitterFromConfig(
 		return nil, err
 	}
 
-	return NewEventEmitter(replicationContext, streamManager, typeManager, taskManager, statsService, filters)
+	emitter, err := NewEventEmitter(replicationContext, streamManager, typeManager, taskManager, statsService, filters)
+	if err != nil {
+		return nil, err
+	}
+
+	// Trace-context propagation from the source is only honored when tracing is
+	// enabled, so that the configured message prefix is not silently consumed
+	// otherwise.
+	if config.GetOrDefault(c, config.PropertyTelemetryTracingEnabled, false) {
+		emitter.tracePropagationPrefix = config.GetOrDefault(
+			c, config.PropertyTelemetryTracingMessagePrefix, "traceparent",
+		)
+	}
+
+	return emitter, nil
 }
 
 func NewEventEmitter(
@@ -141,7 +162,7 @@ func (ee *EventEmitter) NewEventHandler() eventhandlers.BaseReplicationEventHand
 }
 
 func (ee *EventEmitter) emit(
-	xld pgtypes.XLogData, stream stream.Stream, key, value schema.Struct,
+	ctx context.Context, xld pgtypes.XLogData, stream stream.Stream, key, value schema.Struct,
 ) error {
 
 	// Start time
@@ -151,7 +172,7 @@ func (ee *EventEmitter) emit(
 	// Retryable operation
 	operation := func() error {
 		ee.logger.Tracef("Publishing event: %+v", value)
-		return stream.Emit(key, value)
+		return stream.Emit(ctx, key, value)
 	}
 
 	// Run with backoff (it'll automatically reset before starting)
@@ -175,18 +196,37 @@ type eventEmitterEventHandler struct {
 	typeManager  pgtypes.TypeManager
 
 	// Current replication transaction span. The replication stream is processed
-	// sequentially, so a single in-flight transaction is tracked at a time.
+	// sequentially, so a single in-flight transaction is tracked at a time. The
+	// span is created lazily on the first emitted event so that a traceparent
+	// delivered via a logical-replication message can act as its parent.
+	txActive  bool
+	txXid     uint32
+	txParent  context.Context
 	txContext context.Context
 	txSpan    trace.Span
 }
 
-// eventContext returns the context carrying the active transaction span, or a
-// background context when no transaction is open (e.g. during snapshotting).
+// eventContext returns the context carrying the active transaction span,
+// creating that span lazily on first use. Outside of a transaction (e.g. during
+// snapshotting) a background context is returned.
 func (e *eventEmitterEventHandler) eventContext() context.Context {
-	if e.txContext != nil {
-		return e.txContext
+	if !e.txActive {
+		return context.Background()
 	}
-	return context.Background()
+	if e.txSpan == nil {
+		parent := e.txParent
+		if parent == nil {
+			parent = context.Background()
+		}
+		ctx, span := e.eventEmitter.tracer.Start(
+			parent, "postgresql.transaction",
+			trace.WithSpanKind(trace.SpanKindConsumer),
+			trace.WithAttributes(attribute.Int64("db.postgresql.xid", int64(e.txXid))),
+		)
+		e.txContext = ctx
+		e.txSpan = span
+	}
+	return e.txContext
 }
 
 func (e *eventEmitterEventHandler) OnReadEvent(
@@ -300,6 +340,18 @@ func (e *eventEmitterEventHandler) OnMessageEvent(
 	xld pgtypes.XLogData, msg *pgtypes.LogicalReplicationMessage,
 ) error {
 
+	// When a logical-replication message carries an inbound traceparent, consume
+	// it as the parent trace context of the surrounding transaction rather than
+	// emitting it as a change event. Only transactional messages can parent a
+	// transaction span; emit the message first within the writing transaction.
+	if e.eventEmitter.tracePropagationPrefix != "" && msg.Prefix == e.eventEmitter.tracePropagationPrefix {
+		if msg.IsTransactional() {
+			carrier := propagation.MapCarrier{"traceparent": string(msg.Content)}
+			e.txParent = otel.GetTextMapPropagator().Extract(context.Background(), carrier)
+		}
+		return e.eventEmitter.replicationContext.AcknowledgeProcessed(xld, nil)
+	}
+
 	return e.emitMessageEvent(xld, msg,
 		func(source schema.Struct, stream stream.Stream) (schema.Struct, error) {
 			content := base64.StdEncoding.EncodeToString(msg.Content)
@@ -346,13 +398,11 @@ func (e *eventEmitterEventHandler) OnBeginEvent(
 	xld pgtypes.XLogData, _ *pgtypes.BeginMessage,
 ) error {
 
-	ctx, span := e.eventEmitter.tracer.Start(
-		context.Background(), "postgresql.transaction",
-		trace.WithSpanKind(trace.SpanKindConsumer),
-		trace.WithAttributes(attribute.Int64("db.postgresql.xid", int64(xld.Xid))),
-	)
-	e.txContext = ctx
-	e.txSpan = span
+	e.txActive = true
+	e.txXid = xld.Xid
+	e.txParent = nil
+	e.txContext = nil
+	e.txSpan = nil
 	return nil
 }
 
@@ -362,9 +412,12 @@ func (e *eventEmitterEventHandler) OnCommitEvent(
 
 	if e.txSpan != nil {
 		e.txSpan.End()
-		e.txSpan = nil
-		e.txContext = nil
 	}
+	e.txActive = false
+	e.txXid = 0
+	e.txParent = nil
+	e.txContext = nil
+	e.txSpan = nil
 	return nil
 }
 
@@ -404,7 +457,7 @@ func (e *eventEmitterEventHandler) emit0(
 	keyFactory keyFactoryFn, payloadFactory payloadFactoryFn,
 ) (err error) {
 
-	_, span := e.eventEmitter.tracer.Start(
+	eventCtx, span := e.eventEmitter.tracer.Start(
 		e.eventContext(), "timescaledb.event",
 		trace.WithSpanKind(trace.SpanKindProducer),
 		trace.WithAttributes(
@@ -453,14 +506,14 @@ func (e *eventEmitterEventHandler) emit0(
 		return e.eventEmitter.replicationContext.AcknowledgeProcessed(xld, nil)
 	}
 
-	return e.eventEmitter.emit(xld, selectedStream, key, value)
+	return e.eventEmitter.emit(eventCtx, xld, selectedStream, key, value)
 }
 
 func (e *eventEmitterEventHandler) emitMessageEvent(
 	xld pgtypes.XLogData, msg *pgtypes.LogicalReplicationMessage, payloadFactory payloadFactoryFn,
 ) (err error) {
 
-	_, span := e.eventEmitter.tracer.Start(
+	eventCtx, span := e.eventEmitter.tracer.Start(
 		e.eventContext(), "timescaledb.message",
 		trace.WithSpanKind(trace.SpanKindProducer),
 		trace.WithAttributes(attribute.String("messaging.message.prefix", msg.Prefix)),
@@ -507,7 +560,7 @@ func (e *eventEmitterEventHandler) emitMessageEvent(
 	key := schema.Envelope(selectedStream.KeySchema(), keyStruct)
 	value := schema.Envelope(selectedStream.PayloadSchema(), payloadStruct)
 
-	return e.eventEmitter.emit(xld, selectedStream, key, value)
+	return e.eventEmitter.emit(eventCtx, xld, selectedStream, key, value)
 }
 
 func (e *eventEmitterEventHandler) timescaleEventKey(

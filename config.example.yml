@@ -183,6 +183,9 @@ logging:
 #  tracing:
 #    enabled: true
 #    serviceName: 'timescaledb-event-streamer'
+#    # Logical-replication message prefix carrying an inbound traceparent emitted
+#    # via pg_logical_emit_message(true, 'traceparent', '<w3c-traceparent>').
+#    messagePrefix: 'traceparent'
 #    exporter:
 #      protocol: 'grpc' # grpc | http
 #      endpoint: 'localhost:4317'

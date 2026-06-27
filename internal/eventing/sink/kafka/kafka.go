@@ -97,7 +97,7 @@ func (k *kafkaSink) Stop() error {
 }
 
 func (k *kafkaSink) Emit(
-	_ sink.Context, timestamp time.Time, topicName string, key, envelope schema.Struct,
+	context sink.Context, timestamp time.Time, topicName string, key, envelope schema.Struct,
 ) error {
 
 	keyData, err := k.encoder.Marshal(key)
@@ -109,10 +109,19 @@ func (k *kafkaSink) Emit(
 		return err
 	}
 
+	var headers []sarama.RecordHeader
+	for name, value := range sink.TraceHeaders(context) {
+		headers = append(headers, sarama.RecordHeader{
+			Key:   []byte(name),
+			Value: []byte(value),
+		})
+	}
+
 	msg := &sarama.ProducerMessage{
 		Topic:     topicName,
 		Key:       sarama.ByteEncoder(keyData),
 		Value:     sarama.ByteEncoder(envelopeData),
+		Headers:   headers,
 		Timestamp: timestamp,
 	}
 

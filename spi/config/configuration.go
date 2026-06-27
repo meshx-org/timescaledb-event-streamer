@@ -342,9 +342,13 @@ type TelemetryConfig struct {
 }
 
 type TracingConfig struct {
-	Enabled     bool                  `toml:"enabled" yaml:"enabled"`
-	ServiceName string                `toml:"servicename" yaml:"serviceName"`
-	Exporter    TracingExporterConfig `toml:"exporter" yaml:"exporter"`
+	Enabled     bool   `toml:"enabled" yaml:"enabled"`
+	ServiceName string `toml:"servicename" yaml:"serviceName"`
+	// MessagePrefix is the logical-replication message prefix carrying an inbound
+	// W3C traceparent emitted via pg_logical_emit_message(); defaults to
+	// "traceparent" when tracing is enabled.
+	MessagePrefix string                `toml:"messageprefix" yaml:"messagePrefix"`
+	Exporter      TracingExporterConfig `toml:"exporter" yaml:"exporter"`
 }
 
 // TracingExporterConfig configures the OTLP trace exporter. When the endpoint is
