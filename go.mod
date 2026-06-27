@@ -12,7 +12,7 @@ require (
 	github.com/expr-lang/expr v1.17.7
 	github.com/go-errors/errors v1.5.1
 	github.com/go-redis/redis v6.15.9+incompatible
-	github.com/goccy/go-json v0.10.5
+	github.com/goccy/go-json v0.10.6
 	github.com/gookit/color v1.5.4
 	github.com/gookit/goutil v0.6.18
 	github.com/gookit/slog v0.5.8
