@@ -10,7 +10,7 @@ builds:
     env:
       - CGO_ENABLED=0
     ldflags:
-      - -X 'github.com/noctarius/timescaledb-event-streamer/internal/version.Branch={{.Branch}}' -X 'github.com/noctarius/timescaledb-event-streamer/internal/version.CommitHash={{.Commit}}'
+      - -X 'github.com/meshx-org/timescaledb-event-streamer/internal/version.Branch={{.Branch}}' -X 'github.com/meshx-org/timescaledb-event-streamer/internal/version.CommitHash={{.Commit}}'
     goos:
       - linux
       - windows

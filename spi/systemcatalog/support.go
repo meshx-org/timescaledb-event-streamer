@@ -18,7 +18,7 @@
 package systemcatalog
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
 	"strings"
 )
 

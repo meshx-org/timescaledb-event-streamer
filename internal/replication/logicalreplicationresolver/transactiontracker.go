@@ -19,13 +19,13 @@ package logicalreplicationresolver
 
 import (
 	"github.com/jackc/pglogrepl"
-	"github.com/noctarius/timescaledb-event-streamer/internal/containers"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/spi/eventhandlers"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
-	"github.com/noctarius/timescaledb-event-streamer/spi/replicationcontext"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
-	"github.com/noctarius/timescaledb-event-streamer/spi/task"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/containers"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/replicationcontext"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/task"
 	"time"
 )
 

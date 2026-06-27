@@ -19,9 +19,9 @@ package replication
 
 import (
 	"fmt"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
-	"github.com/noctarius/timescaledb-event-streamer/testsupport"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/testsupport"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/exp/slices"
 	"testing"

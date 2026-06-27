@@ -17,7 +17,7 @@
 
 package namingstrategy
 
-import "github.com/noctarius/timescaledb-event-streamer/spi/config"
+import "github.com/meshx-org/timescaledb-event-streamer/spi/config"
 
 type Factory func(config *config.Config) (NamingStrategy, error)
 

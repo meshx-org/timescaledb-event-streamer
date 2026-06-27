@@ -20,7 +20,7 @@ package statestorage
 import (
 	"encoding"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/spi/watermark"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/watermark"
 )
 
 const (

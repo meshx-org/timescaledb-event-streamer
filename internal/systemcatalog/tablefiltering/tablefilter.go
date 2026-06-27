@@ -20,7 +20,7 @@ package tablefiltering
 import (
 	"fmt"
 	"github.com/go-errors/errors"
-	"github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 	"regexp"
 	"strings"
 	"unicode"

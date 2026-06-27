@@ -20,7 +20,7 @@ package pgtypes
 import (
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 )
 
 type TypeManager interface {

@@ -18,8 +18,8 @@
 package schema
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/namingstrategy"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/namingstrategy"
 )
 
 // NameGenerator wraps a namingstrategy.NamingStrategy to

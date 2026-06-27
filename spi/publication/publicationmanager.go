@@ -17,7 +17,7 @@
 
 package publication
 
-import "github.com/noctarius/timescaledb-event-streamer/spi/systemcatalog"
+import "github.com/meshx-org/timescaledb-event-streamer/spi/systemcatalog"
 
 type PublicationManager interface {
 	PublicationName() string

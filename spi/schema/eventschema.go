@@ -20,7 +20,7 @@ package schema
 import (
 	"fmt"
 	"github.com/jackc/pglogrepl"
-	"github.com/noctarius/timescaledb-event-streamer/spi/version"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/version"
 	"github.com/samber/lo"
 	"time"
 )

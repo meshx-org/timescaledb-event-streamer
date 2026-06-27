@@ -41,23 +41,35 @@ anything to the target application._
 
 # Getting Started
 
+## Supported Versions
+
+`timescaledb-event-streamer` supports the following versions:
+
+| Component         | Supported versions                                          |
+|-------------------|-------------------------------------------------------------|
+| PostgreSQL        | 14 or newer (continuously tested against 14, 15, 17, and 18) |
+| TimescaleDB       | 2.10 or newer (continuously tested against 2.11 and latest)  |
+| Go (from source)  | 1.25 or newer (only required when building from source)      |
+
+PostgreSQL 13 and earlier are no longer supported.
+
 ## Installing prebuilt Packages
 
 To automatically download the latest version into the current directory, the repository
 provides a bash script. This script supports downloading on Linux, MacOS, and FreeBSD.
 
 When you want to use Windows, please download the zip file manually from the repository's
-download page at https://github.com/noctarius/timescaledb-event-streamer/releases/latest
+download page at https://github.com/meshx-org/timescaledb-event-streamer/releases/latest
 which automatically redirects to the latest available download.
 
 ```bash
-curl -L https://raw.github.com/noctarius/timescaledb-event-streamer/master/get.sh | bash
+curl -L https://raw.github.com/meshx-org/timescaledb-event-streamer/master/get.sh | bash
 ```
 
 ## Using Docker
 
 To run `timescaledb-event-streamer` via Docker, access the latest version of the Docker image
-using `ghcr.io/noctarius/timescaledb-event-streamer:latest`.
+using `ghcr.io/meshx-org/timescaledb-event-streamer:latest`.
 
 The environment variable `TIMESCALEDB_EVENT_STREAMER_CONFIG` provides the location of the
 configuration file to the tool. This file must be mounted into the running container at the
@@ -70,7 +82,7 @@ docker run \
   --name timescaledb-event-streamer \
   -v ./config.tml:/etc/config.toml \
   -e TIMESCALEDB_EVENT_STREAMER_CONFIG='/etc/config.toml' \
-  ghcr.io/noctarius/timescaledb-event-streamer:latest
+  ghcr.io/meshx-org/timescaledb-event-streamer:latest
 ```
 
 ## Installation from Source
@@ -80,14 +92,14 @@ to be installed. With this requirement satisfied, the installation can be
 kicked off using:
 
 ```bash
-$ go install github.com/noctarius/timescaledb-event-streamer/cmd/timescaledb-event-streamer@latest
+$ go install github.com/meshx-org/timescaledb-event-streamer/cmd/timescaledb-event-streamer@latest
 ```
 
 ## Before you start
 
 Before using the program, a configuration file needs to be created. An example
 configuration can be
-found [here](https://raw.githubusercontent.com/noctarius/timescaledb-event-streamer/main/config.example.toml).
+found [here](https://raw.githubusercontent.com/meshx-org/timescaledb-event-streamer/main/config.example.toml).
 
 For a full reference of the existing configuration options, see the [Configuration](#configuration)
 section.
@@ -121,12 +133,12 @@ database. `timescaledb-event-streamer` will automatically use it when starting u
 function is not available the startup will fail!
 
 The function can be found in the
-[github repository](https://raw.githubusercontent.com/noctarius/timescaledb-event-streamer/main/create_timescaledb_catalog_publication.sql).
+[github repository](https://raw.githubusercontent.com/meshx-org/timescaledb-event-streamer/main/create_timescaledb_catalog_publication.sql).
 
 To install the function you can use as following:
 
 ```bash
-$ wget https://raw.githubusercontent.com/noctarius/timescaledb-event-streamer/main/create_timescaledb_catalog_publication.sql
+$ wget https://raw.githubusercontent.com/meshx-org/timescaledb-event-streamer/main/create_timescaledb_catalog_publication.sql
 $ psql "<connstring>" < create_timescaledb_catalog_publication.sql
 ```
 

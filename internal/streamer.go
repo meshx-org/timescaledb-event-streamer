@@ -20,28 +20,28 @@ package internal
 import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
-	"github.com/noctarius/timescaledb-event-streamer/internal/erroring"
-	"github.com/noctarius/timescaledb-event-streamer/internal/replication"
-	"github.com/noctarius/timescaledb-event-streamer/internal/sysconfig"
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/plugins"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/erroring"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/replication"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/sysconfig"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/plugins"
 	"github.com/samber/lo"
 	"github.com/urfave/cli"
 
 	// Register built-in naming strategies
-	_ "github.com/noctarius/timescaledb-event-streamer/spi/namingstrategy"
+	_ "github.com/meshx-org/timescaledb-event-streamer/spi/namingstrategy"
 
 	// Register built-in offset storages
-	_ "github.com/noctarius/timescaledb-event-streamer/spi/statestorage"
+	_ "github.com/meshx-org/timescaledb-event-streamer/spi/statestorage"
 
 	// Register built-in sinks
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/awskinesis"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/awssqs"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/http"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/kafka"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/nats"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/redis"
-	_ "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink/stdout"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/awskinesis"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/awssqs"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/http"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/kafka"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/nats"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/redis"
+	_ "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink/stdout"
 )
 
 const publicationName = "pg_ts_streamer"

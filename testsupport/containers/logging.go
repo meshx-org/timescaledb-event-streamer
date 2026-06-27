@@ -18,7 +18,7 @@
 package containers
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
 	"github.com/testcontainers/testcontainers-go"
 )
 

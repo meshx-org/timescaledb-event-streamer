@@ -20,12 +20,12 @@
 package plugins
 
 import (
-	namingstrategyimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/namingstrategy"
-	sinkimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/namingstrategy"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sink"
-	"github.com/noctarius/timescaledb-event-streamer/spi/statestorage"
+	namingstrategyimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/namingstrategy"
+	sinkimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/namingstrategy"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sink"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/statestorage"
 	"plugin"
 )
 

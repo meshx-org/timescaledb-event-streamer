@@ -20,8 +20,8 @@ package integration
 import (
 	"encoding/json"
 	"github.com/IBM/sarama"
-	"github.com/noctarius/timescaledb-event-streamer/internal/logging"
-	"github.com/noctarius/timescaledb-event-streamer/testsupport"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/logging"
+	"github.com/meshx-org/timescaledb-event-streamer/testsupport"
 	"testing"
 )
 

@@ -21,8 +21,8 @@ import (
 	"github.com/go-errors/errors"
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5/pgtype"
-	"github.com/noctarius/timescaledb-event-streamer/internal/functional"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/functional"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
 )
 
 type tupleDecoder func(column *pglogrepl.TupleDataColumn, values map[string]any) error

@@ -18,8 +18,8 @@
 package eventfiltering
 
 import (
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

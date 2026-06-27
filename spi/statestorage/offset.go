@@ -20,7 +20,7 @@ package statestorage
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/noctarius/timescaledb-event-streamer/spi/pgtypes"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
 	"github.com/samber/lo"
 	"time"
 )

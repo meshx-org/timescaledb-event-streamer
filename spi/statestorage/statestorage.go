@@ -19,7 +19,7 @@ package statestorage
 
 import (
 	"encoding"
-	"github.com/noctarius/timescaledb-event-streamer/spi/config"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/config"
 )
 
 type StorageProvider = func(config *config.Config) (Storage, error)

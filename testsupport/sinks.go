@@ -18,12 +18,12 @@
 package testsupport
 
 import (
-	sinkimpl "github.com/noctarius/timescaledb-event-streamer/internal/eventing/sink"
-	"github.com/noctarius/timescaledb-event-streamer/internal/sysconfig"
-	"github.com/noctarius/timescaledb-event-streamer/spi/encoding"
-	"github.com/noctarius/timescaledb-event-streamer/spi/schema"
-	"github.com/noctarius/timescaledb-event-streamer/spi/sink"
-	"github.com/noctarius/timescaledb-event-streamer/spi/statestorage"
+	sinkimpl "github.com/meshx-org/timescaledb-event-streamer/internal/eventing/sink"
+	"github.com/meshx-org/timescaledb-event-streamer/internal/sysconfig"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/encoding"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/sink"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/statestorage"
 	"sync"
 	"time"
 )

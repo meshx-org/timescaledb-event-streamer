@@ -18,7 +18,7 @@
 package task
 
 import (
-	"github.com/noctarius/timescaledb-event-streamer/spi/eventhandlers"
+	"github.com/meshx-org/timescaledb-event-streamer/spi/eventhandlers"
 )
 
 type TaskManager interface {

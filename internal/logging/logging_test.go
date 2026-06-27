@@ -19,7 +19,7 @@ package logging
 
 import (
 	"fmt"
-	spiconfig "github.com/noctarius/timescaledb-event-streamer/spi/config"
+	spiconfig "github.com/meshx-org/timescaledb-event-streamer/spi/config"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"os"
