@@ -109,7 +109,7 @@ func (r *redisSink) Stop() error {
 }
 
 func (r *redisSink) Emit(
-	_ sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
+	sinkContext sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
 ) error {
 
 	keyData, err := r.encoder.Marshal(key)
@@ -121,11 +121,16 @@ func (r *redisSink) Emit(
 		return err
 	}
 
+	values := map[string]any{
+		"key":      string(keyData),
+		"envelope": string(envelopeData),
+	}
+	for name, value := range sink.TraceHeaders(sinkContext) {
+		values[name] = value
+	}
+
 	return r.client.XAdd(&redis.XAddArgs{
 		Stream: topicName,
-		Values: map[string]any{
-			"key":      string(keyData),
-			"envelope": string(envelopeData),
-		},
+		Values: values,
 	}).Err()
 }

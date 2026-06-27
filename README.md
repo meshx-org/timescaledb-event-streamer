@@ -543,6 +543,48 @@ as well.
 | `stats.port`            |                                                                                               Configure the port on which it is available. |       int |          8081 |
 | `stats.runtime.enabled` | Enables metrics about this runtime, see [segmentio/procstats](https://github.com/segmentio/stats?tab=readme-ov-file#processes) for details |   boolean |          true |
 
+### Tracing Configuration
+
+`timescaledb-event-streamer` can emit [OpenTelemetry](https://opentelemetry.io/)
+traces. Tracing is disabled by default; when disabled a no-op tracer is installed
+with effectively no runtime overhead. When enabled, a span is created per
+replication transaction with a child span per emitted event, exported via OTLP.
+
+W3C trace-context propagators are always installed, so the tool can continue an
+inbound trace and forward context downstream. If the exporter endpoint is left
+empty, the standard `OTEL_EXPORTER_OTLP_*` / `OTEL_EXPORTER_OTLP_TRACES_*`
+environment variables are honored.
+
+| Property                                | Description                                                                                                                       | Data Type |                      Default Value |
+|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|----------:|-----------------------------------:|
+| `telemetry.tracing.enabled`             | Enables OpenTelemetry tracing.                                                                                                    |   boolean |                              false |
+| `telemetry.tracing.servicename`         | The `service.name` reported on exported spans.                                                                                    |    string |       `timescaledb-event-streamer` |
+| `telemetry.tracing.messageprefix`       | Logical-replication message prefix carrying an inbound `traceparent` (see below). Only honored when tracing is enabled.           |    string |                      `traceparent` |
+| `telemetry.tracing.exporter.protocol`   | The OTLP transport to use. Valid values are `grpc` and `http`.                                                                    |    string |                             `grpc` |
+| `telemetry.tracing.exporter.endpoint`   | The OTLP collector endpoint. If empty, the `OTEL_EXPORTER_OTLP_*` environment variables are used instead.                         |    string |                       empty string |
+| `telemetry.tracing.exporter.insecure`   | Disables transport security (TLS) for the OTLP exporter.                                                                          |   boolean |                              false |
+| `telemetry.tracing.exporter.headers`    | Additional headers (e.g. for authentication) sent to the OTLP collector.                                                          |       map |                       empty struct |
+
+#### End-to-end trace propagation
+
+When tracing is enabled, the W3C `traceparent` of each event is injected into the
+headers / metadata of the emitted messages so downstream consumers can continue
+the trace: Kafka record headers, NATS headers, HTTP request headers, AWS SQS
+message attributes, and Redis stream fields. AWS Kinesis records carry no
+per-record metadata and therefore cannot propagate trace context.
+
+To make the streamer continue a trace started by the application that wrote to
+PostgreSQL, emit the `traceparent` as a transactional logical-replication message
+inside the same transaction as the data changes (emit it first):
+
+```sql
+SELECT pg_logical_emit_message(true, 'traceparent', '<w3c-traceparent>');
+```
+
+The streamer consumes a message whose prefix matches
+`telemetry.tracing.messageprefix` (default `traceparent`) as the parent of that
+transaction's span instead of emitting it as a change event.
+
 
 # Includes and Excludes Patterns
 

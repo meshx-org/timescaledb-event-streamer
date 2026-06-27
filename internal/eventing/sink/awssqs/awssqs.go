@@ -90,12 +90,23 @@ func (a *awsSqsSink) Stop() error {
 }
 
 func (a *awsSqsSink) Emit(
-	_ sink.Context, _ time.Time, topicName string, _, envelope schema.Struct,
+	sinkContext sink.Context, _ time.Time, topicName string, _, envelope schema.Struct,
 ) error {
 
 	envelopeData, err := a.encoder.Marshal(envelope)
 	if err != nil {
 		return err
+	}
+
+	var messageAttributes map[string]*sqs.MessageAttributeValue
+	if traceHeaders := sink.TraceHeaders(sinkContext); len(traceHeaders) > 0 {
+		messageAttributes = make(map[string]*sqs.MessageAttributeValue, len(traceHeaders))
+		for name, value := range traceHeaders {
+			messageAttributes[name] = &sqs.MessageAttributeValue{
+				DataType:    aws.String("String"),
+				StringValue: aws.String(value),
+			}
+		}
 	}
 
 	payload := envelope[schema.FieldNamePayload].(schema.Struct)
@@ -119,6 +130,7 @@ func (a *awsSqsSink) Emit(
 		MessageBody:            aws.String(string(envelopeData)),
 		MessageGroupId:         aws.String(topicName),
 		MessageDeduplicationId: aws.String(msgDeduplicationId),
+		MessageAttributes:      messageAttributes,
 		QueueUrl:               a.queueUrl,
 	})
 	return err

@@ -331,6 +331,34 @@ type Config struct {
 	Internal     InternalConfig     `toml:"internal" yaml:"internal"`
 	Plugins      []string           `toml:"plugins" yaml:"plugins"`
 	Stats        StatsConfig        `toml:"stats" yaml:"stats"`
+	Telemetry    TelemetryConfig    `toml:"telemetry" yaml:"telemetry"`
+}
+
+// TelemetryConfig configures the OpenTelemetry integration. Tracing is disabled
+// by default; when disabled the tool installs a no-op tracer with effectively no
+// runtime overhead.
+type TelemetryConfig struct {
+	Tracing TracingConfig `toml:"tracing" yaml:"tracing"`
+}
+
+type TracingConfig struct {
+	Enabled     bool   `toml:"enabled" yaml:"enabled"`
+	ServiceName string `toml:"servicename" yaml:"serviceName"`
+	// MessagePrefix is the logical-replication message prefix carrying an inbound
+	// W3C traceparent emitted via pg_logical_emit_message(); defaults to
+	// "traceparent" when tracing is enabled.
+	MessagePrefix string                `toml:"messageprefix" yaml:"messagePrefix"`
+	Exporter      TracingExporterConfig `toml:"exporter" yaml:"exporter"`
+}
+
+// TracingExporterConfig configures the OTLP trace exporter. When the endpoint is
+// left empty the exporter falls back to the standard OTEL_EXPORTER_OTLP_* /
+// OTEL_EXPORTER_OTLP_TRACES_* environment variables.
+type TracingExporterConfig struct {
+	Endpoint string            `toml:"endpoint" yaml:"endpoint"`
+	Protocol string            `toml:"protocol" yaml:"protocol"`
+	Insecure bool              `toml:"insecure" yaml:"insecure"`
+	Headers  map[string]string `toml:"headers" yaml:"headers"`
 }
 
 type StateStorageConfig struct {

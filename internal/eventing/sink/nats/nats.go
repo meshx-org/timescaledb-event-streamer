@@ -130,7 +130,7 @@ func (n *natsSink) Stop() error {
 }
 
 func (n *natsSink) Emit(
-	_ sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
+	sinkContext sink.Context, _ time.Time, topicName string, key, envelope schema.Struct,
 ) error {
 
 	keyData, err := n.encoder.Marshal(key)
@@ -144,6 +144,9 @@ func (n *natsSink) Emit(
 
 	header := nats.Header{}
 	header.Add("key", string(keyData))
+	for name, value := range sink.TraceHeaders(sinkContext) {
+		header.Set(name, value)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), n.timeout)
 	defer cancel()

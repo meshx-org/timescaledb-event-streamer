@@ -18,6 +18,7 @@
 package stream
 
 import (
+	"context"
 	"github.com/go-errors/errors"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/pgtypes"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
@@ -32,7 +33,7 @@ type Stream interface {
 	) (schema.Struct, error)
 	PayloadSchema() schema.Struct
 	Emit(
-		key, envelope schema.Struct,
+		ctx context.Context, key, envelope schema.Struct,
 	) error
 }
 
@@ -98,10 +99,10 @@ func (s *tableStreamImpl) Key(
 }
 
 func (s *tableStreamImpl) Emit(
-	key, envelope schema.Struct,
+	ctx context.Context, key, envelope schema.Struct,
 ) error {
 
-	return s.sinkManager.Emit(time.Now(), s.topicName, key, envelope)
+	return s.sinkManager.Emit(ctx, time.Now(), s.topicName, key, envelope)
 }
 
 type messageStreamImpl struct {
@@ -147,8 +148,8 @@ func (m *messageStreamImpl) Key(
 }
 
 func (m *messageStreamImpl) Emit(
-	key, envelope schema.Struct,
+	ctx context.Context, key, envelope schema.Struct,
 ) error {
 
-	return m.sinkManager.Emit(time.Now(), m.topicName, key, envelope)
+	return m.sinkManager.Emit(ctx, time.Now(), m.topicName, key, envelope)
 }

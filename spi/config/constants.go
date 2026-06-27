@@ -39,6 +39,13 @@ const (
 	PropertyStatsPort           = "stats.port"
 	PropertyRuntimeStatsEnabled = "stats.runtime.enabled"
 
+	PropertyTelemetryTracingEnabled          = "telemetry.tracing.enabled"
+	PropertyTelemetryTracingServiceName      = "telemetry.tracing.servicename"
+	PropertyTelemetryTracingMessagePrefix    = "telemetry.tracing.messageprefix"
+	PropertyTelemetryTracingExporterEndpoint = "telemetry.tracing.exporter.endpoint"
+	PropertyTelemetryTracingExporterProtocol = "telemetry.tracing.exporter.protocol"
+	PropertyTelemetryTracingExporterInsecure = "telemetry.tracing.exporter.insecure"
+
 	PropertyStateStorageType     = "statestorage.type"
 	PropertyFileStateStoragePath = "statestorage.file.path"
 

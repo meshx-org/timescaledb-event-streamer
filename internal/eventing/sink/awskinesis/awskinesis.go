@@ -129,6 +129,9 @@ func (a *awsKinesisSink) Stop() error {
 	return nil
 }
 
+// Emit publishes the envelope to Kinesis. Kinesis records carry no per-record
+// headers/metadata, so W3C trace context (sink.TraceHeaders) cannot be
+// propagated downstream from this sink.
 func (a *awsKinesisSink) Emit(
 	_ sink.Context, _ time.Time, topicName string, _, envelope schema.Struct,
 ) error {

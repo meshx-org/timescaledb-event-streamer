@@ -18,6 +18,7 @@
 package sink
 
 import (
+	"context"
 	"github.com/meshx-org/timescaledb-event-streamer/spi/schema"
 	"time"
 )
@@ -26,6 +27,6 @@ type Manager interface {
 	Start() error
 	Stop() error
 	Emit(
-		timestamp time.Time, topicName string, key, envelope schema.Struct,
+		ctx context.Context, timestamp time.Time, topicName string, key, envelope schema.Struct,
 	) error
 }
